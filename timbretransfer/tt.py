@@ -82,14 +82,15 @@ def save_wav(array_of_floats,
 
     # Save as WAV
     wavfile.write(filename, sample_rate, array_of_ints)
-    print(f"Saved WAV file: {filename}")
+    print(f"\nSaved WAV file: {filename}")
 
 
-def process_audio(audio, model, DATASET_STATS):
+def process_audio(audio, ckpt, DATASET_STATS):
     # Setup the session.
     ddsp.spectral_ops.reset_crepe()
 
-    audio = audio[np.newaxis, :]
+    if len(audio.shape) == 1:
+        audio = audio[np.newaxis, :]
 
     # Compute features.
     start_time = time.time()
@@ -100,6 +101,11 @@ def process_audio(audio, model, DATASET_STATS):
 
     time_steps = int(audio.shape[1] / hop_size)
     n_samples = time_steps * hop_size
+
+    # print("\n===Resynthesis===")
+    # print("Time Steps", time_steps)
+    # print("Samples", n_samples)
+    # print('')
 
     gin_params = [
         'Harmonic.n_samples = {}'.format(n_samples),
@@ -115,6 +121,16 @@ def process_audio(audio, model, DATASET_STATS):
     for key in ['f0_hz', 'f0_confidence', 'loudness_db']:
         audio_features[key] = audio_features[key][:time_steps]
     audio_features['audio'] = audio_features['audio'][:, :n_samples]
+
+    # Set up the model just to predict audio given new conditioning
+    # TODO figure out how to use restore model outside this function. Temporary fix for clipped outputs.
+    model = ddsp.training.models.Autoencoder()
+    model.restore(ckpt)
+
+    # Build model by running a batch through it.
+    start_time = time.time()
+    _ = model(audio_features, training=False)
+    print('Restoring model took %.1f seconds' % (time.time() - start_time))
 
     #@markdown ## Note Detection
 
@@ -194,12 +210,8 @@ def process_audio(audio, model, DATASET_STATS):
     audio_features_mod = shift_ld(audio_features_mod, loudness_shift)
     audio_features_mod = shift_f0(audio_features_mod, pitch_shift)
 
-    return audio_features, audio_features_mod
 
-
-def resynthesize_audio(audio_features, audio_features_mod):
     #@title #Resynthesize Audio
-
     af = audio_features if audio_features_mod is None else audio_features_mod
 
     # Run a batch of predictions.
@@ -245,23 +257,22 @@ if __name__ == '__main__':
     ckpt_name = ckpt_files[0].split('.')[0]
     ckpt = os.path.join(model_dir, ckpt_name)
 
-    # Set up the model just to predict audio given new conditioning
-    model = ddsp.training.models.Autoencoder()
-    model.restore(ckpt)
-
     # Ensure dimensions and sampling rates are equal
     time_steps_train = gin.query_parameter('F0LoudnessPreprocessor.time_steps')
     n_samples_train = gin.query_parameter('Harmonic.n_samples')
     hop_size = int(n_samples_train / time_steps_train)
 
+    # print("===Trained model===")
+    # print("Time Steps", time_steps_train)
+    # print("Samples", n_samples_train)
+    # print("Hop Size", hop_size)
+
     # TODO Process
     audios, fnames = load_audio_files("../dataset/raw/metadata.csv")
     for audio, fname in zip(audios, fnames):
-        audio_features, audio_features_mod = process_audio(audio, model, DATASET_STATS=DATASET_STATS)
-        audio_gen = resynthesize_audio(audio_features, audio_features_mod)
-        fname = fname.split("/")[-1]
-        savepath = "../tt_dataset/"+model_name.lower()+"/"+fname
-        save_wav(audio_gen, savepath)
+        audio_gen = process_audio(audio, ckpt, DATASET_STATS=DATASET_STATS)
+        save_path = "../tt_dataset/"+model_name.lower()+"/"+fname.split("/")[-1]
+        save_wav(audio_gen, save_path)
 
 
 
