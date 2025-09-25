@@ -1,4 +1,5 @@
 # Ignore a bunch of deprecation warnings
+import argparse
 import warnings
 
 import pandas as pd
@@ -225,10 +226,12 @@ def process_audio(audio, ckpt, DATASET_STATS):
 
 
 if __name__ == '__main__':
-    #@title Load a model
-    #@markdown Run for ever new audio input
-    # TODO set model name using a parameter
-    model_name = 'Flute' #@param ['Violin', 'Flute', 'Flute2', 'Trumpet', 'Tenor_Saxophone', 'Upload your own (checkpoint folder as .zip)']
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model-name", type=str, required=True, help="Model name: Violin/Flute/Trumpet/Tenor_Saxophone")
+    args = parser.parse_args()
+
+
+    model_name = args.model_name #@param ['Violin', 'Flute', 'Flute2', 'Trumpet', 'Tenor_Saxophone', 'Upload your own (checkpoint folder as .zip)']
     MODEL = model_name
 
     if model_name in ('Violin', 'Flute', 'Flute2', 'Trumpet', 'Tenor_Saxophone'):
