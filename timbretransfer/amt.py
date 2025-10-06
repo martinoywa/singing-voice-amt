@@ -3,8 +3,8 @@ Loads metadata data, and runs automatic music transcription
 using basic-pitch and MT3 of each audio file.
 This generates these models baseline transcriptions.
 """
-# from basic_pitch.inference import predict, Model
-# from basic_pitch import ICASSP_2022_MODEL_PATH
+from basic_pitch.inference import predict, Model
+from basic_pitch import ICASSP_2022_MODEL_PATH
 import pandas as pd
 import time
 
@@ -17,7 +17,7 @@ import note_seq
 
 
 SAMPLE_RATE = 16000
-# basic_pitch_model = Model(ICASSP_2022_MODEL_PATH)
+basic_pitch_model = Model(ICASSP_2022_MODEL_PATH)
 MODEL = "mt3"
 checkpoint_path = f'checkpoints/{MODEL}/'
 inference_model = InferenceModel(checkpoint_path, MODEL)
@@ -49,9 +49,9 @@ def MT3_transcription(fname, output_dir="amt_dataset/MT3/", sample_rate=SAMPLE_R
 
 if __name__ == "__main__":
     start_time = time.time()
-    fnames = load_audio_files("dataset/raw/metadata.csv")
+    fnames = load_audio_files("dataset/raw/metadata.csv") # TODO add option to load files from path
     for fname in fnames:
-        # basic_pitch_transcription(fname)
+        basic_pitch_transcription(fname)
         MT3_transcription(fname[3:])
         print("Processed audio file ", fname)
     end_time = time.time()
