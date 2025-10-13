@@ -34,17 +34,17 @@ def load_audio_files(metadata_file_path, filetype="path"):
             fname = "../"+row['wav']
             fnames.append(fname)
     else:
-        fnames = [_  for _ in glob.glob(metadata_file_path+"*.*")]
+        fnames = [_  for _ in glob.glob(metadata_file_path+"*.*")] # TODO fix with os.path.join(metadata_file_path, "*.wav")
     return fnames
 
-def basic_pitch_transcription(fname, output_dir="../amt_dataset/basic_pitch/"): # TODO create argparse variable
+def basic_pitch_transcription(fname, output_dir="../amt_dataset/basic_pitch/"):
     model_output, midi_data, note_events = predict(fname, basic_pitch_model)
     # return model_output, midi_data, note_events
     save_path = output_dir+fname.split("/")[-1].split(".")[0]+".mid"
     midi_data.write(save_path)
 
 
-def MT3_transcription(fname, output_dir="amt_dataset/MT3/", sample_rate=SAMPLE_RATE): # TODO create argparse variable
+def MT3_transcription(fname, output_dir="amt_dataset/MT3/", sample_rate=SAMPLE_RATE):
     audio = upload_audio(fname, sample_rate=SAMPLE_RATE)
     est_ns = inference_model(audio)
     save_path = output_dir+fname.split("/")[-1].split(".")[0]+".mid"
@@ -54,8 +54,8 @@ def MT3_transcription(fname, output_dir="amt_dataset/MT3/", sample_rate=SAMPLE_R
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Load metadata and run transcription")
     parser.add_argument("--metadata-file-path", type=str, required=True, default="../dataset/raw/metadata.csv")
-    parser.add_argument("--file-type", type=str, required=True, default="csv")
-    parser.add_argument("--output-dir", type=str, default="../amt_dataset/basic_pitch/")
+    parser.add_argument("--file-type", type=str, required=True, default="csv", choices=["csv", "path"])
+    parser.add_argument("--output-dir", type=str, required=True, default="../amt_dataset/baselines/basic_pitch/")
     args = parser.parse_args()
 
     metadata_file_path = args.metadata_file_path
@@ -63,10 +63,10 @@ if __name__ == "__main__":
     output_dir = args.output_dir
 
     start_time = time.time()
-    fnames = load_audio_files(metadata_file_path, filetype=file_type) # TODO add option to load files from path
+    fnames = load_audio_files(metadata_file_path, filetype=file_type)
     for fname in fnames:
         basic_pitch_transcription(fname, output_dir=output_dir)
-        # MT3_transcription(fname[3:], output_dir=output_dir)
+        MT3_transcription(fname, output_dir=output_dir)
         print("Processed audio file ", fname)
     end_time = time.time()
     print(f"Done! Total time: {end_time-start_time:.2f} seconds.")
