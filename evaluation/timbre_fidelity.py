@@ -39,6 +39,7 @@ def batch_evaluate(ground_truth_dir, predicted_dir, save_csv=True, output_csv="t
     print(f"Found {len(common_files)} matching WAV pairs")
 
     for file in common_files:
+        print(f"Evaluating {file}")
         gt_path = gt_files[file]
         pred_path = pred_files[file]
 

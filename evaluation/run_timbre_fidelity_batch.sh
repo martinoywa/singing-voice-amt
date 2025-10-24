@@ -3,7 +3,7 @@
 # Ensure the script is executable: chmod +x run_amt_batch_ubuntu.sh
 # Ensure you have the necessary Python environment activated before running this script.
 # Usage: ./run_amt_batch_ubuntu.sh
-# This script was created to process multiple instruments in a batch since it takes a long time to run. ~50 minutes per instrument.
+# This script was created to process multiple instruments in a batch since it takes a long time to run. ~15 minutes per instrument.
 
 # Base paths
 PYTHON_EXEC="/opt/anaconda3/envs/timbre-fidelity/bin/python"
