@@ -1,0 +1,5 @@
+../dataset/wav/f3_dona_straight.wav, Basic Pitch, flute
+../dataset/wav/m6_row_straight.wav, Basic Pitch, trumpet
+../dataset/wav/m3_caro_straight.wav, Basic Pitch, tenor_saxophone
+../dataset/wav/f9_dona_straight.wav, MT3, violin
+../dataset/wav/f5_dona_straight.wav, Basic Pitch, tenor_saxophone
