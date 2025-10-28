@@ -1,0 +1,9 @@
+Metric,Instrument,Score
+MFCC Similarity,Flute,0.9854824923235794
+MFCC Similarity,Tenor saxophone,0.9792817374493213
+MFCC Similarity,Trumpet,0.9775138898142453
+MFCC Similarity,Violin,0.97157480696152
+Embedding Similarity,Flute,0.933787667545779
+Embedding Similarity,Tenor saxophone,0.9575130723892374
+Embedding Similarity,Trumpet,0.9532679072741804
+Embedding Similarity,Violin,0.9425875544548035
