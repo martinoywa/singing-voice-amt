@@ -1,6 +1,6 @@
 Singing Voice,Transcribed,Instrument,Similar? (Yes/No),Notes
-../dataset/wav/f3_dona_straight.wav,Basic Pitch,flute,,
-../dataset/wav/m6_row_straight.wav,Basic Pitch,trumpet,,
-../dataset/wav/m3_caro_straight.wav,Basic Pitch,tenor_saxophone,,
-../dataset/wav/f9_dona_straight.wav,MT3,violin,,
-../dataset/wav/f5_dona_straight.wav,Basic Pitch,tenor_saxophone,,
+../dataset/wav/f3_dona_straight.wav,Basic Pitch,flute,No,"The model was able to capture the initial part of the song well, but quickly fell off."
+../dataset/wav/m6_row_straight.wav,Basic Pitch,trumpet,Yes,"Even though there were some instances where the notes sustain differed, the overall listening experience of the transcription sounded similar."
+../dataset/wav/m3_caro_straight.wav,MT3,tenor_saxophone,No,"Generated pure noice with a mix of instrument and drums. The original song even though straight, had some vibrato essences to it. Maybe why."
+../dataset/wav/f9_dona_straight.wav,MT3,violin,Yes,"Across the isolated violin sections, the model performed quite well. Some random noice was heard, but overall sounded similar."
+../dataset/wav/f5_dona_straight.wav,Basic Pitch,tenor_saxophone,No,"Even though quite similar, the random noice was too distracting to give this a yes."
