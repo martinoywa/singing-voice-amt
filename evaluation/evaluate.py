@@ -1,9 +1,16 @@
 import argparse
 import os
+import random
+
 import numpy as np
 import pandas as pd
 import pretty_midi
 import mir_eval
+
+
+SEED = 42
+random.seed(SEED)
+np.random.seed(SEED)
 
 # -----------------------------------------------------------
 # 1. Load MIDI notes from file
@@ -62,6 +69,12 @@ def evaluate_midi_pair(ref_midi, est_midi, onset_tolerance=0.05, offset_ratio=0.
         ref_intervals[:, 0], est_intervals[:, 0], window=onset_tolerance
     )
 
+    # Compute TER
+    n_ref = len(ref_intervals)
+    n_est = len(est_intervals)
+    true_positives = int(precision * n_est)
+    ter = compute_transcription_error_rate(n_ref, n_est, true_positives)
+
     return {
         "Precision": precision,
         "Recall": recall,
@@ -69,8 +82,33 @@ def evaluate_midi_pair(ref_midi, est_midi, onset_tolerance=0.05, offset_ratio=0.
         "Onset Precision": onset_precision,
         "Onset Recall": onset_recall,
         "Onset F1": onset_f1,
-        "Onset-Offset F1": f1_onoff
+        "Onset-Offset F1": f1_onoff,
+        "TER": ter
     }
+
+
+def compute_transcription_error_rate(n_ref, n_est, true_positives):
+    """
+    Compute Transcription Error Rate (TER).
+
+    Parameters
+    ----------
+    n_ref : int
+        Number of reference notes (ground truth)
+    n_est : int
+        Number of predicted notes (system output)
+    true_positives : int
+        Number of correctly matched notes (within tolerance)
+
+    Returns
+    -------
+    ter : float
+        Transcription Error Rate (0–100%)
+    """
+    false_negatives = n_ref - true_positives
+    false_positives = n_est - true_positives
+    ter = (false_positives + false_negatives) / max(1, n_ref) # * 100.0
+    return ter
 
 
 # -----------------------------------------------------------
@@ -109,9 +147,6 @@ def batch_evaluate(ground_truth_dir, predicted_dir, save_csv=True, output_csv="e
     return df, avg
 
 
-# -----------------------------------------------------------
-# 4. Example Usage
-# -----------------------------------------------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--ground-truth-dir", type=str, required=True, default="../dataset/midi/")
