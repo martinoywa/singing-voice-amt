@@ -211,3 +211,12 @@ __marimo__/
 dataset/
 .DS_Store
 *.png
+tt_dataset/
+amt_dataset/
+*.wav
+*.mid
+mt3/
+ddsp/
+pretrained/
+.run_*
+all files.csv
