@@ -1,10 +1,10 @@
 # Singing Voice AMT with Timbre Transfer
 
-This repository contains the code and notebooks for the MSc dissertation **“Timbre Transfer of the Human Singing Voice for Effective Automatic Music Transcription”** by **Bonface Martin Oywa** (University of East London / UNICAF, 2025).  [oai_citation:0‡Timbre Transfer of Human Singing Voice for Effective Automatic Music Transcription Dissertation.pdf](sediment://file_00000000d9e8723093557e57444c6fa6)
+This repository contains the code and notebooks for the MSc dissertation **“Timbre Transfer of the Human Singing Voice for Effective Automatic Music Transcription”** by **Bonface Martin Oywa** (University of East London / UNICAF, 2025). [Timbre Transfer of Human Singing Voice for Effective Automatic Music Transcription Dissertation.pdf](https://github.com/martinoywa/singing-voice-amt/blob/master/Timbre%20Transfer%20of%20Human%20Singing%20Voice%20for%20Effective%20Automatic%20Music%20Transcription%20Dissertation.pdf)
 
 The project investigates whether converting human singing voice into instrument-like timbres (via DDSP) can improve the performance of state-of-the-art Automatic Music Transcription (AMT) systems such as **Basic Pitch** and **MT3**.
 
-> **Short answer:** timbre transfer substantially changes the audio, but does **not** reliably improve overall vocal AMT accuracy compared to transcribing the raw singing voice.  [oai_citation:1‡Timbre Transfer of Human Singing Voice for Effective Automatic Music Transcription Dissertation.pdf](sediment://file_00000000d9e8723093557e57444c6fa6)
+> **Short answer:** timbre transfer substantially changes the audio, but does **not** reliably improve overall vocal AMT accuracy compared to transcribing the raw singing voice.
 
 ---
 
@@ -12,25 +12,25 @@ The project investigates whether converting human singing voice into instrument-
 
 ### 1.1 Research Question
 
-> *Does converting human singing voice into instrument-like timbres via timbre transfer improve downstream AMT performance compared to direct vocal transcription, and under what conditions?*  [oai_citation:2‡Timbre Transfer of Human Singing Voice for Effective Automatic Music Transcription Dissertation.pdf](sediment://file_00000000d9e8723093557e57444c6fa6)
+> *Does converting human singing voice into instrument-like timbres via timbre transfer improve downstream AMT performance compared to direct vocal transcription, and under what conditions?* 
 
 To answer this, the repository implements a **unified pipeline**:
 
 1. **Data Engineering / Ground Truth**
     - Start from **Annotated-VocalSet** extended CSV files (note onsets, offsets, MIDI pitches, etc.).
-    - Generate ground-truth **MIDI** files and a `metadata.csv` linking each audio excerpt to its MIDI.  [oai_citation:3‡Timbre Transfer of Human Singing Voice for Effective Automatic Music Transcription Dissertation.pdf](sediment://file_00000000d9e8723093557e57444c6fa6)
+    - Generate ground-truth **MIDI** files and a `metadata.csv` linking each audio excerpt to its MIDI.
 
 2. **Timbre Transfer (DDSP)**
-    - Convert monophonic singing into instrument-like audio (Violin, Flute, Trumpet, Tenor Saxophone) using pre-trained **DDSP** autoencoders.  [oai_citation:4‡Timbre Transfer of Human Singing Voice for Effective Automatic Music Transcription Dissertation.pdf](sediment://file_00000000d9e8723093557e57444c6fa6)
+    - Convert monophonic singing into instrument-like audio (Violin, Flute, Trumpet, Tenor Saxophone) using pre-trained **DDSP** autoencoders.
 
 3. **Automatic Music Transcription (AMT)**
     - Transcribe both **raw vocals** and **timbre-transferred** audio using:
         - **Basic Pitch** (Spotify)
-        - **MT3** (Multi-Task Multitrack Music Transcription, Google)  [oai_citation:5‡Timbre Transfer of Human Singing Voice for Effective Automatic Music Transcription Dissertation.pdf](sediment://file_00000000d9e8723093557e57444c6fa6)
+        - **MT3** (Multi-Task Multitrack Music Transcription, Google) 
 
 4. **Evaluation**
-    - Objective AMT evaluation with **MIR-Eval**: Precision, Recall, F1, Onset F1, Onset-Offset F1, and Transcription Error Rate (TER).  [oai_citation:6‡Timbre Transfer of Human Singing Voice for Effective Automatic Music Transcription Dissertation.pdf](sediment://file_00000000d9e8723093557e57444c6fa6)
-    - Timbre fidelity evaluation with **MFCC similarity** and **OpenL3 embedding similarity** between original and converted audio.  [oai_citation:7‡Timbre Transfer of Human Singing Voice for Effective Automatic Music Transcription Dissertation.pdf](sediment://file_00000000d9e8723093557e57444c6fa6)
+    - Objective AMT evaluation with **MIR-Eval**: Precision, Recall, F1, Onset F1, Onset-Offset F1, and Transcription Error Rate (TER).
+    - Timbre fidelity evaluation with **MFCC similarity** and **OpenL3 embedding similarity** between original and converted audio.
     - Small subjective listening test for “note-flow” similarity.
 
 ---
@@ -143,7 +143,7 @@ Tasks:  ￼
 3.	Align audio & MIDI
 •	Copy the corresponding .wav files into a local folder (e.g. dataset/wav/).
 •	Save generated .mid files into dataset/midi/.
-   4.	Build metadata
+4.	Build metadata
    •	Create dataset/metadata.csv with at least:
    •	excerpt_name (e.g. m6_row_straight)
    •	wav_path (e.g. dataset/wav/m6_row_straight.wav)
@@ -205,9 +205,6 @@ Scripts in evaluation/ compute:
 	•	Onset F1
 	•	Onset-Offset F1
 	•	Transcription Error Rate (TER)
-[
-\text{TER} = \frac{\text{FP} + \text{FN}}{N_{\text{ref}}}
-]
 	•	Typical onset tolerance: 50 ms
 	•	Offset tolerance: 20% of note duration
 	2.	Timbre fidelity metrics
@@ -243,30 +240,29 @@ High-level findings from the dissertation:  ￼
 ⸻
 
 ## 7. How to Reproduce the Dissertation Experiments [Instructions WIP]
-	1.	Obtain datasets
-	•	Download Annotated-VocalSet extended CSVs and corresponding WAVs from Zenodo.
-	2.	Generate MIDI + metadata
-	•	Run data_engineering.ipynb to create:
-	•	dataset/midi/
-	•	dataset/wav/
-	•	dataset/metadata.csv
-	3.	Run timbre transfer
-	•	Set up DDSP environment (e.g. macOS).
-	•	Download pre-trained DDSP models and place them under pretrained/<instrument>/.
-	•	Run timbre_transfer.ipynb → tt_dataset/<instrument>/.
-	4.	Run AMT models
-	•	Set up an environment for MT3 (e.g. Ubuntu + GPU).
-	•	Use Basic Pitch + MT3 to transcribe:
-	•	dataset/wav/ → amt_dataset/baselines/...
-	•	tt_dataset/... → amt_dataset/converted/...
-	5.	Evaluate
-	•	Use scripts in evaluation/ to compute:
-	•	Per-file metrics
-	•	Aggregated results tables & plots to compare:
-	•	Baseline vs converted
-	•	Different timbres (Violin, Flute, Trumpet, Tenor Sax)
-	6.	Optional
-	•	Run the listening test utilities to replicate the small subjective evaluation.
+1.	Obtain datasets
+	- Download Annotated-VocalSet extended CSVs and corresponding WAVs from Zenodo.
+3.	Generate MIDI + metadata
+	- Run data_engineering.ipynb to create:
+		1. dataset/midi/
+  		2. dataset/wav/
+    	3. dataset/metadata.csv
+4.	Run timbre transfer
+	- Set up DDSP environment (e.g. macOS).
+ 	- Download pre-trained DDSP models and place them under pretrained/<instrument>/.
+  	- Run timbre_transfer.ipynb → tt_dataset/<instrument>/.
+6.	Run AMT models
+	- Set up an environment for MT3 (e.g. Ubuntu + GPU).
+ 	- Use Basic Pitch + MT3 to transcribe:
+  	- dataset/wav/ → amt_dataset/baselines/...
+   	- tt_dataset/... → amt_dataset/converted/...
+7.	Evaluate
+	- Use scripts in evaluation/ to compute:
+ 		1. Per-file metrics, aggregated results tables & plots to compare:
+   			- Baseline vs converted
+      		- Different timbres (Violin, Flute, Trumpet, Tenor Sax)
+8.	Optional
+	- Run the listening test utilities to replicate the small subjective evaluation.
 
 ⸻
 
@@ -274,6 +270,7 @@ High-level findings from the dissertation:  ￼
 
 If you use this code or reproduce parts of the pipeline, please cite the dissertation:
 
+```
 @mastersthesis{oywa2025timbretransfer,
   author       = {Bonface Martin Oywa},
   title        = {Timbre Transfer of the Human Singing Voice for Effective Automatic Music Transcription},
@@ -281,6 +278,7 @@ If you use this code or reproduce parts of the pipeline, please cite the dissert
   year         = {2025},
   month        = {December}
 }
+```
 
 
 ⸻
