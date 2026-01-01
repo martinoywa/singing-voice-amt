@@ -190,7 +190,7 @@ The dissertation’s main AMT systems are:  ￼
 
 You will typically:
 1.	Transcribe baseline vocal audio
-   -  For each dataset/wav/<name>.wav:
+	- For each dataset/wav/<name>.wav:
 		1. Basic Pitch → amt_dataset/baselines/basic_pitch/<name>.mid
 		2. Run MT3 → amt_dataset/baselines/MT3/<name>.mid
 2. Transcribe timbre-transferred audio
@@ -202,46 +202,46 @@ You will typically:
 ### 5.4 Step 4 – Evaluation
 
 Scripts in evaluation/ compute:
-	1.	Note-level AMT metrics (using MIR-Eval):  ￼
-	•	Precision, Recall, F1
-	•	Onset F1
-	•	Onset-Offset F1
-	•	Transcription Error Rate (TER)
-	•	Typical onset tolerance: 50 ms
-	•	Offset tolerance: 20% of note duration
-	2.	Timbre fidelity metrics
-	•	MFCC similarity (cosine similarity of time-aggregated MFCCs)
-	•	Embedding similarity using OpenL3 (cosine similarity of music embeddings)  ￼
-	3.	Listening test utilities
-	•	Simple randomised selection of original vs converted excerpts.
-	•	Allows a binary “musically similar note flow? (Yes/No)” rating.
+1.	Note-level AMT metrics (using MIR-Eval):
+	- Precision, Recall, F1
+	- Onset F1
+	- Onset-Offset F1
+	- Transcription Error Rate (TER)
+	- Typical onset tolerance: 50 ms
+	- Offset tolerance: 20% of note duration
+2.	Timbre fidelity metrics:
+	- MFCC similarity (cosine similarity of time-aggregated MFCCs)
+	- Embedding similarity using OpenL3 (cosine similarity of music embeddings)  ￼
+3.	Listening test utilities:
+	- Simple randomised selection of original vs converted excerpts.
+	- Allows a binary “musically similar note flow? (Yes/No)” rating.
 
 ⸻
 
 ## 6. Key Results (Summary)
 
 High-level findings from the dissertation:  ￼
-	•	Baseline vocal AMT
-	•	Both Basic Pitch and MT3 underperform their reported piano/instrument benchmarks on singing voice.
-	•	Average note-level F1 ≈ 0.33–0.34, Onset-Offset F1 ≈ 0.18–0.20.
-	•	MT3 generally has more stable Onset F1 and lower TER; Basic Pitch sometimes has slightly higher note-level F1.
-	•	Converted (timbre-transferred) AMT
-	•	Tenor Saxophone is the most AMT-friendly timbre:
-	•	Best Basic Pitch F1 ≈ 0.20
-	•	Best MT3 F1 ≈ 0.14
-	•	Onset F1 > 0.5 for both models.
-	•	Flute and Violin timbres yield very low F1 (near zero for some settings).
-	•	Overall, timbre transfer does not outperform baseline vocal transcription when averaged over all excerpts and metrics; F1 drops and TER rises compared to raw vocals.
-	•	Timbre fidelity vs transcription accuracy
-	•	MFCC similarity is a poor predictor of AMT performance (weak/non-significant correlations).
-	•	Embedding similarity (OpenL3) correlates strongly and positively with AMT metrics (r ≳ 0.9).
-	•	Increasing timbre fidelity beyond a certain threshold (~0.96–0.97 MFCC similarity) shows diminishing or even negative returns on F1.
-	•	Listening test
-	•	Only 2/5 randomly selected converted excerpts were judged as clearly similar in “note flow” to the original vocals, indicating residual artefacts and noisy sustains in some conversions.
+1. Baseline vocal AMT:
+	- Both Basic Pitch and MT3 underperform their reported piano/instrument benchmarks on singing voice.
+	- Average note-level F1 ≈ 0.33–0.34, Onset-Offset F1 ≈ 0.18–0.20.
+	- MT3 generally has more stable Onset F1 and lower TER; Basic Pitch sometimes has slightly higher note-level F1.
+2. Converted (timbre-transferred) AMT:
+	- Tenor Saxophone is the most AMT-friendly timbre:
+		1. Best Basic Pitch F1 ≈ 0.20
+		2. Best MT3 F1 ≈ 0.14
+		3. Onset F1 > 0.5 for both models.
+	- Flute and Violin timbres yield very low F1 (near zero for some settings).
+	- Overall, timbre transfer does not outperform baseline vocal transcription when averaged over all excerpts and metrics; F1 drops and TER rises compared to raw vocals.
+3. Timbre fidelity vs transcription accuracy:
+	- MFCC similarity is a poor predictor of AMT performance (weak/non-significant correlations).
+	- Embedding similarity (OpenL3) correlates strongly and positively with AMT metrics (r ≳ 0.9).
+	- Increasing timbre fidelity beyond a certain threshold (~0.96–0.97 MFCC similarity) shows diminishing or even negative returns on F1.
+4. Listening test:
+	- Only 2/5 randomly selected converted excerpts were judged as clearly similar in “note flow” to the original vocals, indicating residual artefacts and noisy sustains in some conversions.
 
 ⸻
 
-## 7. How to Reproduce the Dissertation Experiments [Instructions WIP]
+## 7. How to Reproduce the Dissertation Experiments
 1.	Obtain datasets
 	- Download Annotated-VocalSet extended CSVs and corresponding WAVs from Zenodo.
 3.	Generate MIDI + metadata
